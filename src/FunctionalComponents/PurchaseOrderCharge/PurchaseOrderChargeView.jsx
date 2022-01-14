@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import {StandardTable} from "../../_core/components/Table"
+import { StandardTable } from "../../_core/components/Table"
 import GlobalStateContext from "../../_core/providers/GlobalStateContext";
 import { startup, commandBarActionHandler, commandBarInquireHandler, lineMenuActionHandler, lineMenuInquireHandler, sideBarActionHandler, sideBarInquireHandler, doSearch } from "./PurchaseOrderChargeAction";
 import { columns, commandBarButtons, sideBarButtons, lineMenus, tableConfig, tableStyle } from "./PurchaseOrderChargeConfig"
