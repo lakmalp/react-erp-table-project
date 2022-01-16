@@ -10,6 +10,9 @@ const po_api = {
   query: (pageNo, pageSize, query) => {
     return api().get(`/api/purchaseOrders/query`, { params: { pageNo: pageNo, pageSize: pageSize, query: query } })
   },
+  update: (id, data) => {
+    return api().patch(`/api/purchaseOrders/${id}`, data)
+  },
 }
 
 export default po_api;

@@ -3,6 +3,8 @@ import { IconEdit, IconPlus } from "../../_core/utilities/svg-icons"
 import GlobalStateContext from "../../_core/providers/GlobalStateContext";
 import { useContext } from "react";
 import { DialogBoxContext } from "../../_core/providers/DialogBoxContext";
+import { DialogBoxConstants } from "../../_core/components/DialogBox/DialogBoxPlaceholder";
+import { purchase_order_api } from "../../_core/api";
 
 const PurchaseOrderView = (props) => {
   const globalState = useContext(GlobalStateContext)
@@ -18,8 +20,10 @@ const PurchaseOrderView = (props) => {
     DialogBox.showModal(<PurchaseOrderForm />, window_size, params, cmdEdit_callback);
   }
 
-  const cmdEdit_callback = (result, data) => {
-
+  const cmdEdit_callback = async (result, data) => {
+    if (result === DialogBoxConstants.Result.Ok) {
+      globalState.write(props.name, data)
+    }
   }
   
   return (
