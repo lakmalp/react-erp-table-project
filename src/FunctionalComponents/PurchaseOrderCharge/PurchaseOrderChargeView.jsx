@@ -1,5 +1,7 @@
 import { useContext, useEffect } from "react";
-import { StandardTable } from "../../_core/components/Table"
+// import { StandardTable } from "../../_core/components/Table"
+import { StandardTable } from "react-erp-table";
+// import { StandardTable } from "../../_core/components/Table/index"
 import GlobalStateContext from "../../_core/providers/GlobalStateContext";
 import { startup, commandBarActionHandler, commandBarInquireHandler, lineMenuActionHandler, lineMenuInquireHandler, sideBarActionHandler, sideBarInquireHandler, doSearch } from "./PurchaseOrderChargeAction";
 import { columns, commandBarButtons, sideBarButtons, lineMenus, tableConfig, tableStyle } from "./PurchaseOrderChargeConfig"
@@ -8,7 +10,7 @@ const PurchaseOrderCharge = (props) => {
   let globalState = useContext(GlobalStateContext)
 
   useEffect(() => {
-    props.active && !globalState.read(props.name) &&props.refreshData()
+    props.active && !globalState.read(props.name) && props.refreshData()
   }, [props.active])
 
   return (

@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { DialogBoxContext } from "../../_core/providers/DialogBoxContext";
-import { StandardTable } from "../../_core/components/Table/index"
+// import { StandardTable } from "../../_core/components/Table/index"
+import { StandardTable } from "react-erp-table";
 import { columns, commandBarButtons, sideBarButtons, lineMenus, tableConfig, tableStyle } from "./PurchaseOrderLineConfig"
 import PurchaseOrderLineForm from "./PurchaseOrderLineForm";
 import GlobalStateContext from "../../_core/providers/GlobalStateContext";
