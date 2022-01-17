@@ -5,10 +5,12 @@ import { useContext } from "react";
 import { DialogBoxContext } from "../../_core/providers/DialogBoxContext";
 import { DialogBoxConstants } from "../../_core/components/DialogBox/DialogBoxPlaceholder";
 import { purchase_order_api } from "../../_core/api";
+import { ToastContext } from "../../_core/providers/ToastContext";
 
 const PurchaseOrderView = (props) => {
   const globalState = useContext(GlobalStateContext)
   let DialogBox = useContext(DialogBoxContext);
+  let Toast = useContext(ToastContext)
 
   const edit = () => {
     globalState.write("activeDataSource", "PurchaseOrder")
@@ -23,6 +25,7 @@ const PurchaseOrderView = (props) => {
   const cmdEdit_callback = async (result, data) => {
     if (result === DialogBoxConstants.Result.Ok) {
       globalState.write(props.name, data)
+      Toast.show(<span>Updated</span>, Toast.Constants.Type.Success, Toast.Constants.ModeOfClose.Auto)
     }
   }
   

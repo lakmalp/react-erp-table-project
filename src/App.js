@@ -14,7 +14,8 @@ import { AuthProvider } from "./_core/providers/AuthContext"
 import { GlobalStateProvider, GlobalVarProvider } from './_core/providers/GlobalStateContext';
 import { IconLoading, IconPlus, IconSave, IconTrash } from './_core/utilities/svg-icons';
 // import history from './_core/utilities/history';
-import { BreadCrumbs, MainCommandBar } from "./_core/components/index"
+import { BreadCrumbs, MainCommandBar, ToastContainer } from "./_core/components/index"
+import { ToastProvider } from './_core/providers/ToastContext';
 
 function App() {
 
@@ -22,24 +23,27 @@ function App() {
     <>
       <GlobalStateProvider>
         <DialogBoxProvider>
-          <DialogBoxContainer />
-          <Router>
-            <div className='flex h-screen '>
-              <div className='w-60 bg-gray-900 h-full pt-10 pl-2 text-white text-sm'>
-                <div className='py-1 pl-1 hover:bg-gray-800'>Purchase Orders</div>
-                <div className='py-1 pl-1 hover:bg-gray-800'>Customer Orders</div>
-              </div>
-              <div className=" w-full">
-                <div className='flex justify-between items-center bg-gray-900 px-2 h-10'>
-                  <BreadCrumbs />
-                  <MainCommandBar />
+          <ToastProvider>
+            <ToastContainer />
+            <DialogBoxContainer />
+            <Router>
+              <div className='flex h-screen '>
+                <div className='w-60 bg-gray-900 h-full pt-10 pl-2 text-white text-sm'>
+                  <div className='py-1 pl-1 hover:bg-gray-800'>Purchase Orders</div>
+                  <div className='py-1 pl-1 hover:bg-gray-800'>Customer Orders</div>
                 </div>
-                <Routes>
-                  <Route path="/" element={<PurchaseOrderScreen />}></Route>
-                </Routes>
+                <div className=" w-full">
+                  <div className='flex justify-between items-center bg-gray-900 px-2 h-10'>
+                    <BreadCrumbs />
+                    <MainCommandBar />
+                  </div>
+                  <Routes>
+                    <Route path="/" element={<PurchaseOrderScreen />}></Route>
+                  </Routes>
+                </div>
               </div>
-            </div>
-          </Router>
+            </Router>
+          </ToastProvider>
         </DialogBoxProvider>
       </GlobalStateProvider>
       {/* <AuthProvider>
