@@ -1,6 +1,6 @@
-import api from "./init"
+import api from "../../../_core/api/init"
 
-const po_api = {
+const purchase_order_api = {
   index: (pageNo, pageSize) => {
     return api().get(`/api/purchaseOrders/`, { params: { pageNo: pageNo, pageSize: pageSize } })
   },
@@ -13,6 +13,12 @@ const po_api = {
   update: (id, data) => {
     return api().patch(`/api/purchaseOrders/${id}`, data)
   },
+  prepareCreate: () => {
+    return api().get(`/api/purchaseOrders/prepareCreate`)
+  },
+  create: (data) => {
+    return api().post(`/api/purchaseOrders`, data)
+  },
 }
 
-export default po_api;
+export default purchase_order_api;

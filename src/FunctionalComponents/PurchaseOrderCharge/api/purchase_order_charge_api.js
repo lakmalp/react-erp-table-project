@@ -1,4 +1,4 @@
-import api from "./init"
+import api from "../../../_core/api/init"
 
 const poc_api = {
   index: (poNo, pageNo, pageSize) => {

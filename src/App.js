@@ -6,7 +6,8 @@ import PurchaseOrderScreen from "./Screens/PurchaseOrderScreen"
 
 import {
   BrowserRouter as Router,
-  Routes, Route
+  Routes,
+  Route
 } from "react-router-dom";
 import { DialogBoxContext, DialogBoxProvider } from './_core/providers/DialogBoxContext';
 import { DialogBoxContainer } from './_core/components/DialogBox';
@@ -38,7 +39,7 @@ function App() {
                     <MainCommandBar />
                   </div>
                   <Routes>
-                    <Route path="/" element={<PurchaseOrderScreen />}></Route>
+                    <Route path="purchaseOrders/:id" element={<PurchaseOrderScreen />}></Route>
                   </Routes>
                 </div>
               </div>

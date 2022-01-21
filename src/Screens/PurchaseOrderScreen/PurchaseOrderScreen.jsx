@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
+import { useParams } from "react-router-dom";
 import PoJournalView from '../../FunctionalComponents/PoJournal';
 import PurchaseOrderChargeView from '../../FunctionalComponents/PurchaseOrderCharge';
 import PurchaseOrderLineView from '../../FunctionalComponents/PurchaseOrderLine';
@@ -7,13 +8,14 @@ import { useSearchParams } from 'react-router-dom';
 import PurchaseOrderView from '../../FunctionalComponents/PurchaseOrder/PurchaseOrderView';
 import ScreenSection from '../../_core/components/ScreenSection';
 import GlobalStateContext from '../../_core/providers/GlobalStateContext';
-import { purchase_order_api, purchase_order_line_api, purchase_order_charge_api } from '../../_core/api';
+import purchase_order_api from '../../FunctionalComponents/PurchaseOrder/api/purchase_order_api';
 
 const PurchaseOrderScreen = (props) => {
-  let [searchParams, setSearchParams] = useSearchParams();
+  let id = useParams().id;
+  // let [searchParams, setSearchParams] = useSearchParams();
   const theme = useRef("blue").current;
   const containerRef = useRef();
-  let id = searchParams.get("id")
+  // let id = searchParams.get("id")
   let globalState = useContext(GlobalStateContext)
 
   useEffect(() => {
@@ -26,17 +28,20 @@ const PurchaseOrderScreen = (props) => {
     let _res = '';
     switch (dataSource) {
       case "PurchaseOrder":
+        console.log('-----1----------');
         try {
           _res = await purchase_order_api.get(id);
-          data = _res.data;
+          console.log('-----2----------');
+          data = _res.data.data;
         } catch (err) {
+          console.log('-----3----------');
           console.log(err.message)
         }
         break;
 
       case "PurchaseOrderLine":
         try {
-          _res = await purchase_order_line_api.index(id, 0, 0);
+          // _res = await purchase_order_line_api.index(id, 0, 0);
           console.log(_res.data)
           data = _res.data;
         } catch (err) {
@@ -46,7 +51,7 @@ const PurchaseOrderScreen = (props) => {
 
       case "PurchaseOrderCharge":
         try {
-          _res = await purchase_order_charge_api.index(id, 0, 0);
+          // _res = await purchase_order_charge_api.index(id, 0, 0);
           console.log(_res.data)
           data = _res.data;
         } catch (err) {
