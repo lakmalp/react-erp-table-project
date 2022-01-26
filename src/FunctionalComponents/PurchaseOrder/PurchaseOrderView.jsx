@@ -4,7 +4,7 @@ import GlobalStateContext from "../../_core/providers/GlobalStateContext";
 import { useContext } from "react";
 import { DialogBoxContext } from "../../_core/providers/DialogBoxContext";
 import { DialogBoxConstants } from "../../_core/components/DialogBox/DialogBoxPlaceholder";
-// import { ToastContext } from "../../_core/providers/ToastContext";
+import { ToastContext } from "../../_core/providers/ToastContext";
 import { SectionCommandBar } from "../../_core/components"
 import purchase_order_api from "./api/purchase_order_api";
 import { formatDate } from "../../_core/utilities/date-formatting";
@@ -12,7 +12,7 @@ import { formatDate } from "../../_core/utilities/date-formatting";
 const PurchaseOrderView = (props) => {
   const globalState = useContext(GlobalStateContext)
   let DialogBox = useContext(DialogBoxContext);
-  // let Toast = useContext(ToastContext)
+  let Toast = useContext(ToastContext)
 
   const cmdEdit_callback = async (result, data) => {
     if (result === DialogBoxConstants.Result.Ok) {
@@ -33,8 +33,11 @@ const PurchaseOrderView = (props) => {
 
   const cmdCreate_callback = async (result, data) => {
     if (result === DialogBoxConstants.Result.Ok) {
-      // globalState.write(props.name, data)
-      // Toast.show(<span>Updated</span>, Toast.Constants.Type.Success, Toast.Constants.ModeOfClose.Auto)
+      if (data.redirect) {
+        globalState.write(props.name, data.content)
+      } else {
+        Toast.show(<span className="font-nunito"><a className="underline" href={`/purchaseOrders/${data.content.po_no}`}>{`Purchase Order ${data.content.po_no}`}</a> {`successfully created.`}</span>, Toast.Constants.Type.Success, Toast.Constants.ModeOfClose.Auto, 4000)
+      }
     }
   }
 

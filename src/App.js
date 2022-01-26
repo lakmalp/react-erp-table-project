@@ -1,33 +1,34 @@
-import React, { Suspense, useContext } from 'react';
+import React, {
+  // Suspense, 
+  useContext
+} from 'react';
 // import { Helmet, HelmetProvider } from 'react-helmet-async';
 import './App.css';
 import PurchaseOrderScreen from "./Screens/PurchaseOrderScreen"
 // import RouteStore from "./_core/components/RouteStore"
 
 import {
-  BrowserRouter as Router,
+  BrowserRouter,
   Routes,
   Route
 } from "react-router-dom";
 import { DialogBoxContext, DialogBoxProvider } from './_core/providers/DialogBoxContext';
 import { DialogBoxContainer } from './_core/components/DialogBox';
-import { AuthProvider } from "./_core/providers/AuthContext"
+// import { AuthProvider } from "./_core/providers/AuthContext"
 import { GlobalStateProvider, GlobalVarProvider } from './_core/providers/GlobalStateContext';
-import { IconLoading, IconPlus, IconSave, IconTrash } from './_core/utilities/svg-icons';
-// import history from './_core/utilities/history';
 import { BreadCrumbs, MainCommandBar, ToastContainer } from "./_core/components/index"
 import { ToastProvider } from './_core/providers/ToastContext';
+// import history from './_core/utilities/history';
 
 function App() {
-
   return (
     <>
-      <GlobalStateProvider>
-        <DialogBoxProvider>
-          <ToastProvider>
-            <ToastContainer />
-            <DialogBoxContainer />
-            <Router>
+      <BrowserRouter>
+        <GlobalStateProvider>
+          <DialogBoxProvider>
+            <ToastProvider>
+              <ToastContainer />
+              <DialogBoxContainer />
               <div className='flex h-screen '>
                 <div className='w-60 bg-gray-900 h-full pt-10 pl-2 text-white text-sm'>
                   <div className='py-1 pl-1 hover:bg-gray-800'>Purchase Orders</div>
@@ -43,10 +44,10 @@ function App() {
                   </Routes>
                 </div>
               </div>
-            </Router>
-          </ToastProvider>
-        </DialogBoxProvider>
-      </GlobalStateProvider>
+            </ToastProvider>
+          </DialogBoxProvider>
+        </GlobalStateProvider>
+      </BrowserRouter>
       {/* <AuthProvider>
         <GlobalVarProvider>
         <DialogBoxProvider>

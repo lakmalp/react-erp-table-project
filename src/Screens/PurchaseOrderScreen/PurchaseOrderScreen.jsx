@@ -20,7 +20,7 @@ const PurchaseOrderScreen = (props) => {
 
   useEffect(() => {
     refreshData("PurchaseOrder");
-  }, [])
+  }, [id])
 
   const refreshData = async (dataSource) => {
     globalState.setLoadingSource(dataSource)
@@ -28,13 +28,10 @@ const PurchaseOrderScreen = (props) => {
     let _res = '';
     switch (dataSource) {
       case "PurchaseOrder":
-        console.log('-----1----------');
         try {
           _res = await purchase_order_api.get(id);
-          console.log('-----2----------');
           data = _res.data.data;
         } catch (err) {
-          console.log('-----3----------');
           console.log(err.message)
         }
         break;
@@ -63,13 +60,8 @@ const PurchaseOrderScreen = (props) => {
         break;
     }
 
-    setTimeout(() => {
-      globalState.write(
-        dataSource,
-        data
-      )
-      globalState.setLoadingSource("")
-    }, 2000);
+    globalState.write(dataSource, data);
+    globalState.setLoadingSource("");
   }
 
   return (

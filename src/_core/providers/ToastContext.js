@@ -28,7 +28,7 @@ export const ToastProvider = ({ children }) => {
           }
         },
         stack: stack,
-        show: (comp, type, modeOfClose) => {
+        show: (comp, type, modeOfClose, duration = 1000) => {
           let next_window_id = windowId + 1;
           setWindowId(next_window_id);
           setStack(prev => {
@@ -39,6 +39,7 @@ export const ToastProvider = ({ children }) => {
                   component: comp,
                   type: type,
                   modeOfClose: modeOfClose,
+                  duration: duration,
                   callback: (stack) => handleDialogAction(stack),
                   windowId: next_window_id
 

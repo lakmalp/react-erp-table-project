@@ -8,6 +8,7 @@ const SectionCommandBar = (props) => {
       {
         props.buttons && props.buttons.map((button, index) =>
           <Button
+            type="button"
             key={index}
             text={button.caption}
             disabled={button.disabled}

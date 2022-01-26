@@ -4,9 +4,9 @@ import { DialogBoxConstants } from "../../_core/components/DialogBox/DialogBoxPl
 import { formatDate } from "../../_core/utilities/date-formatting";
 import { IconExclamationInCircle, IconSave, IconTickInCircle } from "../../_core/utilities/svg-icons";
 import purchase_order_api from "./api/purchase_order_api";
-// import { createHashHistory as history } from "history";
 import { decodeError } from "../../_core/utilities/exception-handler";
-import { useNavigate } from "react-router-dom";
+import { useNavigate  } from "react-router-dom";
+// import history from "../../_core/utilities/history";
 
 const PurchaseOrderForm = (props) => {
   let navigate = useNavigate();
@@ -18,17 +18,22 @@ const PurchaseOrderForm = (props) => {
     setLocalData(prev => ({ ...prev, created_date: formatDate(props.data.created_date), delivery_date: formatDate(props.data.delivery_date) }))
   }, [props.data])
 
-  const save = async () => {
+  const save = async (redirect) => {
     try {
       setStatus("waiting")
       if (typeof props.data.id === 'undefined') {
         let res = await purchase_order_api.create(localData)
         setStatus("success")
-        navigate(`/purchaseOrders/${res.data.data.id}`);
+        if (redirect) {
+          props.callback(DialogBoxConstants.Result.Ok, { redirect:true, content: res.data.data })
+          navigate(`/purchaseOrders/${res.data.data.id}`);
+        } else {
+          props.callback(DialogBoxConstants.Result.Ok, { redirect: false, content: res.data.data })
+        }
       } else {
         let res = await purchase_order_api.update(props.data.id, localData)
         setStatus("success")
-        setTimeout(() => props.callback(DialogBoxConstants.Result.Ok, res.data.data), 1000)
+        props.callback(DialogBoxConstants.Result.Ok, res.data.data)
       }
     } catch (err) {
       setError(JSON.parse(decodeError(err).message))
@@ -69,13 +74,19 @@ const PurchaseOrderForm = (props) => {
           </span>
         }
         <Button
+          text="Save & Stay"
+          disabled={["waiting", "success"].includes(status) ? true : false}
+          callback={() => save()}
+        />
+        <Button
+          type="button"
           text={
             status === "waiting" ? "Saving..."
               : status === "success" ? "Saved"
-                : "Save"
+                : "Save & Go"
           }
           disabled={["waiting", "success"].includes(status) ? true : false}
-          callback={() => save()}
+          callback={() => save(true)}
           icon={{ component: (status === "success" ? <IconTickInCircle /> : <IconSave />), width: 13 }}
         />
       </div>

@@ -7,7 +7,7 @@ export const ToastPlaceholder = (props) => {
 
   useEffect(() => {
     if (props.modeOfClose === Toast.Constants.ModeOfClose.Auto) {
-      setTimeout(() => props.callback(Toast.stack),2000)
+      setTimeout(() => props.callback(Toast.stack),props.duration)
     }
   },[])
 
