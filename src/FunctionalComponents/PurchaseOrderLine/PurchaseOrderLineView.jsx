@@ -35,34 +35,38 @@ const PurchaseOrderLineView = (props) => {
   }
 
   const commandBarInquireHandler = (data, setData, line_selections, action) => {
-    // line_selections = [id1, id2, ...]
-    if (line_selections.length > 0) {
-      switch (action) {
-        case "cmdRelease":
-          return data.filter(line => line_selections.includes(line.id)).reduce((acc, curr) => {
-            return acc && (curr.status === "Open")
-          }, true);
-
-        case "cmdCreateInvoice":
-          return data.filter(line => line_selections.includes(line.id)).reduce((acc, curr) => {
-            return acc && (curr.status === "Released")
-          }, true);
-
-        case "cmdSendToIfs":
-          return data.filter(line => line_selections.includes(line.id)).reduce((acc, curr) => {
-            return acc && (curr.status === "Closed")
-          }, true);
-
-        case "cmdSendToProm":
-          return data.filter(line => line_selections.includes(line.id)).reduce((acc, curr) => {
-            return acc && (["Released", "Closed"].includes(curr.status))
-          }, true);
-
-        default:
-          return false;
-      }
-    } else {
+    if (props.disabled) {
       return false;
+    } else {
+      // line_selections = [id1, id2, ...]
+      if (line_selections.length > 0) {
+        switch (action) {
+          case "cmdRelease":
+            return data.filter(line => line_selections.includes(line.id)).reduce((acc, curr) => {
+              return acc && (curr.status === "Open")
+            }, true);
+
+          case "cmdCreateInvoice":
+            return data.filter(line => line_selections.includes(line.id)).reduce((acc, curr) => {
+              return acc && (curr.status === "Released")
+            }, true);
+
+          case "cmdSendToIfs":
+            return data.filter(line => line_selections.includes(line.id)).reduce((acc, curr) => {
+              return acc && (curr.status === "Closed")
+            }, true);
+
+          case "cmdSendToProm":
+            return data.filter(line => line_selections.includes(line.id)).reduce((acc, curr) => {
+              return acc && (["Released", "Closed"].includes(curr.status))
+            }, true);
+
+          default:
+            return false;
+        }
+      } else {
+        return false;
+      }
     }
   }
 
@@ -71,21 +75,25 @@ const PurchaseOrderLineView = (props) => {
   }
 
   const sideBarInquireHandler = (data, setData, line_selections, action) => {
-    switch (action) {
-      case "cmdNewRecord":
-        return true;
+    if (props.disabled) {
+      return false;
+    } else {
+      switch (action) {
+        case "cmdNewRecord":
+          return true;
 
-      case "cmdDuplicateSelected":
-        return (line_selections.length === 1 ? true : false);
+        case "cmdDuplicateSelected":
+          return (line_selections.length === 1 ? true : false);
 
-      case "cmdEditSelected":
-        return (line_selections.length === 1 ? true : false);
+        case "cmdEditSelected":
+          return (line_selections.length === 1 ? true : false);
 
-      case "cmdDeleteSelected":
-        return (line_selections.length > 0 ? true : false);
+        case "cmdDeleteSelected":
+          return (line_selections.length > 0 ? true : false);
 
-      default:
-        return false;
+        default:
+          return false;
+      }
     }
   }
 
@@ -142,6 +150,7 @@ const PurchaseOrderLineView = (props) => {
       sideBarActionHandler={sideBarActionHandler}
       containerRef={props.containerRef}
       search={doSearch}
+      buttonEnablers={[props.disabled]}
       />
   )
 }

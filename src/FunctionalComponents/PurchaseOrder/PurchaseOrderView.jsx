@@ -25,7 +25,8 @@ const PurchaseOrderView = (props) => {
     globalState.write("activeDataSource", "PurchaseOrder")
     let params = {
       data: {...globalState.read(props.name)},
-      selectedLines: "line_selections"
+      selectedLines: "line_selections",
+      mode: "edit"
     };
     let window_size = "sm:w-5/6 md:w-4/6 lg:w-2/4 xl:w-2/5 2xl:w-2/6";
     DialogBox.showModal(<PurchaseOrderForm />, window_size, params, cmdEdit_callback);
@@ -42,12 +43,12 @@ const PurchaseOrderView = (props) => {
   }
 
   const prepareCreate = async () => {
-    globalState.write("activeDataSource", "PurchaseOrder")
-    let res = await purchase_order_api.prepareCreate();
+  //   globalState.write("activeDataSource", "PurchaseOrder")
+  //   let res = await purchase_order_api.prepareCreate();
     let params = {
-      data: {...res.data.data}
+      data: {},
+      mode: "create"
     };
-    console.log(params);
     let window_size = "sm:w-5/6 md:w-4/6 lg:w-2/4 xl:w-2/5 2xl:w-3/6";
     DialogBox.showModal(<PurchaseOrderForm />, window_size, params, cmdCreate_callback);
   }
@@ -68,12 +69,12 @@ const PurchaseOrderView = (props) => {
       icon: <IconPlus />,
       disabled: false
     },
-    {
-      caption: "Delete",
-      callback: prepareDelete,
-      icon: <IconTrash />,
-      disabled: false
-    }
+    // {
+    //   caption: "Delete",
+    //   callback: prepareDelete,
+    //   icon: <IconTrash />,
+    //   disabled: false
+    // }
   ]
   
   return (

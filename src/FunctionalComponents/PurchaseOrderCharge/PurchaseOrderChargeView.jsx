@@ -32,6 +32,7 @@ const PurchaseOrderCharge = (props) => {
       sideBarActionHandler={sideBarActionHandler}
       containerRef={props.containerRef}
       search={doSearch}
+      buttonEnablers={[props.disabled]}
     />
   )
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useParams } from "react-router-dom";
 import PoJournalView from '../../FunctionalComponents/PoJournal';
 import PurchaseOrderChargeView from '../../FunctionalComponents/PurchaseOrderCharge';
@@ -12,7 +12,7 @@ import purchase_order_api from '../../FunctionalComponents/PurchaseOrder/api/pur
 
 const PurchaseOrderScreen = (props) => {
   let id = useParams().id;
-  // let [searchParams, setSearchParams] = useSearchParams();
+  let [headerLoading, setHeaderLoading] = useState(true);
   const theme = useRef("blue").current;
   const containerRef = useRef();
   // let id = searchParams.get("id")
@@ -21,6 +21,14 @@ const PurchaseOrderScreen = (props) => {
   useEffect(() => {
     refreshData("PurchaseOrder");
   }, [id])
+
+  useEffect(() => {
+    if (globalState.read("PurchaseOrder")) {
+      setHeaderLoading(false)
+    } else {
+      setHeaderLoading(true)
+    }
+  }, [globalState])
 
   const refreshData = async (dataSource) => {
     globalState.setLoadingSource(dataSource)
@@ -60,8 +68,10 @@ const PurchaseOrderScreen = (props) => {
         break;
     }
 
-    globalState.write(dataSource, data);
-    globalState.setLoadingSource("");
+    setTimeout(() => {
+      globalState.write(dataSource, data);
+      globalState.setLoadingSource("");
+    }, 3000);    
   }
 
   return (
@@ -77,6 +87,7 @@ const PurchaseOrderScreen = (props) => {
           refreshData={() => refreshData("PurchaseOrder")}
           className="mt-4 mb-8 px-2"
           theme={theme}
+          disabled={headerLoading}
         />
       </ScreenSection>
       <ScreenSection className="px-2" name="PODetails">
@@ -84,13 +95,13 @@ const PurchaseOrderScreen = (props) => {
           <Tab target="tabPurchaseOrderLine" label="PO Lines" active />
           <Tab target="tabPurchaseOrderCharge" label="Charges" />
           <Tab target="tabPoAddressInfo" label="Addres Info" disabled />
-          <Tab target="tabPoJournal" label="PO Journal" />
-          <Tab target="tabTab1" label="Another Tab 1" />
-          <Tab target="tabTab2" label="Another Tab With Long Name" />
-          <Tab target="tabTab3" label="Another Tab 3" />
-          <Tab target="tabTab4" label="Let's Make It Little Bigger" />
-          <Tab target="tabTab5" label="Another Tab 5" />
-          <Tab target="tabTab6" label="Another Tab 6" />
+          <Tab target="tabPoJournal" label="PO Journal" disabled={headerLoading} />
+          <Tab target="tabTab1" label="Another Tab 1" disabled={headerLoading} />
+          <Tab target="tabTab2" label="Another Tab With Long Name" disabled={headerLoading} />
+          <Tab target="tabTab3" label="Another Tab 3" disabled={headerLoading} />
+          <Tab target="tabTab4" label="Let's Make It Little Bigger" disabled={headerLoading} />
+          <Tab target="tabTab5" label="Another Tab 5" disabled={headerLoading} />
+          <Tab target="tabTab6" label="Another Tab 6" disabled={headerLoading} />
 
           <TabPane name="tabPurchaseOrderLine" >
             <PurchaseOrderLineView
@@ -99,6 +110,7 @@ const PurchaseOrderScreen = (props) => {
               data={globalState.read("PurchaseOrderLine")}
               refreshData={() => refreshData("PurchaseOrderLine")}
               theme={theme}
+              disabled={headerLoading}
             />
           </TabPane>
           <TabPane name="tabPurchaseOrderCharge">
@@ -108,6 +120,7 @@ const PurchaseOrderScreen = (props) => {
               data={globalState.read("PurchaseOrderCharge")}
               refreshData={() => refreshData("PurchaseOrderCharge")}
               theme={theme}
+              disabled={headerLoading}
             />
           </TabPane>
           <TabPane name="tabPoJournal">
@@ -117,6 +130,7 @@ const PurchaseOrderScreen = (props) => {
               data={globalState.read("PoJournal")}
               refreshData={() => refreshData("PoJournal")}
               theme={theme}
+              disabled={headerLoading}
             />
           </TabPane>
         </TabContainer>
