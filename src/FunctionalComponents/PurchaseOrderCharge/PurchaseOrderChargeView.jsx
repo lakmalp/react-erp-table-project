@@ -8,8 +8,8 @@ const PurchaseOrderCharge = (props) => {
   let globalState = useContext(GlobalStateContext)
 
   useEffect(() => {
-    props.active && !globalState.read(props.name) && props.refreshData()
-  }, [props.active])
+    props.active && !props.disabled && props.refreshData()
+  }, [props.active, props.disabled])
 
   return (
     <StandardTable

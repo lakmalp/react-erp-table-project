@@ -1,10 +1,18 @@
-import React, { useContext } from "react"
+import React, { useContext, useState, useEffect } from "react"
 import GlobalStateContext from "../../providers/GlobalStateContext.js"
 import { Button } from "../index.js"
+import {IconLoading} from "../../utilities/svg-icons"
 
 const SectionCommandBar = (props) => {
+  let globalState = useContext(GlobalStateContext);
+  const [parentLoading, setParentLoading] = useState();
+
+  useEffect(() => {
+    setParentLoading(globalState.loadingSource === props.section);
+  },[globalState.loadingSource]);
+
   return (
-    <div className="font-montserrat text-sm font-semibold text-ss-900 bg-ss-100 p-2">
+    <div className="flex items-center font-montserrat text-sm font-semibold text-ss-900 bg-ss-100 p-2">
       {
         props.buttons && props.buttons.map((button, index) =>
           <Button
@@ -17,6 +25,7 @@ const SectionCommandBar = (props) => {
           />
         )
       }
+      <IconLoading width="20" color="rgb(50,50,50)" className={"ml-2 animate-spin " + (parentLoading ? "" : "hidden")} />
     </div>
   )
 }

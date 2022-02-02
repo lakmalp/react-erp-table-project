@@ -9,6 +9,7 @@ import PurchaseOrderView from '../../FunctionalComponents/PurchaseOrder/Purchase
 import ScreenSection from '../../_core/components/ScreenSection';
 import GlobalStateContext from '../../_core/providers/GlobalStateContext';
 import purchase_order_api from '../../FunctionalComponents/PurchaseOrder/api/purchase_order_api';
+import purchase_order_line_api from '../../FunctionalComponents/PurchaseOrderLine/purchase_order_line_api';
 
 const PurchaseOrderScreen = (props) => {
   let id = useParams().id;
@@ -31,6 +32,7 @@ const PurchaseOrderScreen = (props) => {
   }, [globalState])
 
   const refreshData = async (dataSource) => {
+    console.log(`Refreshing: ${dataSource}`)
     globalState.setLoadingSource(dataSource)
     let data = '';
     let _res = '';
@@ -39,6 +41,8 @@ const PurchaseOrderScreen = (props) => {
         try {
           _res = await purchase_order_api.get(id);
           data = _res.data.data;
+          globalState.write(dataSource, data);
+          globalState.setLoadingSource("");
         } catch (err) {
           console.log(err.message)
         }
@@ -46,9 +50,10 @@ const PurchaseOrderScreen = (props) => {
 
       case "PurchaseOrderLine":
         try {
-          // _res = await purchase_order_line_api.index(id, 0, 0);
-          console.log(_res.data)
-          data = _res.data;
+          _res = await purchase_order_line_api.getPOLines(id, 0, 0);
+          data = _res.data.data;
+          globalState.write(dataSource, data);
+          globalState.setLoadingSource("");
         } catch (err) {
           console.log(err.message)
         }
@@ -57,8 +62,9 @@ const PurchaseOrderScreen = (props) => {
       case "PurchaseOrderCharge":
         try {
           // _res = await purchase_order_charge_api.index(id, 0, 0);
-          console.log(_res.data)
-          data = _res.data;
+          // data = _res.data.data;
+          // globalState.write(dataSource, data);
+          globalState.setLoadingSource("");
         } catch (err) {
           console.log(err.message)
         }
@@ -68,10 +74,6 @@ const PurchaseOrderScreen = (props) => {
         break;
     }
 
-    setTimeout(() => {
-      globalState.write(dataSource, data);
-      globalState.setLoadingSource("");
-    }, 3000);    
   }
 
   return (
@@ -81,6 +83,7 @@ const PurchaseOrderScreen = (props) => {
       </div>
       <ScreenSection name="Header">
         <PurchaseOrderView
+          parent=""
           name="PurchaseOrder"
           containerRef={containerRef}
           data={globalState.read("PurchaseOrder")}
@@ -88,6 +91,7 @@ const PurchaseOrderScreen = (props) => {
           className="mt-4 mb-8 px-2"
           theme={theme}
           disabled={headerLoading}
+          isHeaderLoading={headerLoading}
         />
       </ScreenSection>
       <ScreenSection className="px-2" name="PODetails">
@@ -105,40 +109,38 @@ const PurchaseOrderScreen = (props) => {
 
           <TabPane name="tabPurchaseOrderLine" >
             <PurchaseOrderLineView
+              parent="PurchaseOrder"
               name="PurchaseOrderLine"
               containerRef={containerRef}
-              data={globalState.read("PurchaseOrderLine")}
               refreshData={() => refreshData("PurchaseOrderLine")}
               theme={theme}
               disabled={headerLoading}
+              isHeaderLoading={headerLoading}
             />
           </TabPane>
           <TabPane name="tabPurchaseOrderCharge">
             <PurchaseOrderChargeView
+              parent="PurchaseOrder"
               name="PurchaseOrderCharge"
               containerRef={containerRef}
-              data={globalState.read("PurchaseOrderCharge")}
               refreshData={() => refreshData("PurchaseOrderCharge")}
               theme={theme}
               disabled={headerLoading}
+              isHeaderLoading={headerLoading}
             />
           </TabPane>
           <TabPane name="tabPoJournal">
             <PoJournalView
+              parent="PurchaseOrder"
               name="PoJournal"
               containerRef={containerRef}
-              data={globalState.read("PoJournal")}
               refreshData={() => refreshData("PoJournal")}
               theme={theme}
               disabled={headerLoading}
+              isHeaderLoading={headerLoading}
             />
           </TabPane>
         </TabContainer>
-        {/* <pre>
-          {
-            JSON.stringify(globalState.loadingSource)
-          }
-        </pre> */}
       </ScreenSection>
     </div>
   )

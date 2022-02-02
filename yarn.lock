@@ -8413,10 +8413,10 @@
     "object-assign" "^4.1.1"
     "scheduler" "^0.20.2"
 
-"react-erp-table@^1.0.0-alpha.1.0.10":
-  "integrity" "sha512-fzWuJeG5zAICJ90aURdkbiS6m4dL5ns6aQUdVd2QMCTuvmw4N21t6ybRVu3AEIKB6WhEQwgDF791Mot7A9RSsw=="
-  "resolved" "https://registry.npmjs.org/react-erp-table/-/react-erp-table-1.0.0-alpha.1.0.10.tgz"
-  "version" "1.0.0-alpha.1.0.10"
+"react-erp-table@^1.0.0-alpha.1.0.12":
+  "integrity" "sha512-tpW48Z0h8pOkohbhghj1FxQE4g/i/SpXt4FxFmrTUU4jSfUSxRRtM2yOHSN1aD6P1t0B+oT8xbc0GHfnXbMPXg=="
+  "resolved" "https://registry.npmjs.org/react-erp-table/-/react-erp-table-1.0.0-alpha.1.0.12.tgz"
+  "version" "1.0.0-alpha.1.0.12"
   dependencies:
     "numeral" "^2.0.6"
     "react" "^17.0.2"

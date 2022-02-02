@@ -14,6 +14,16 @@ export const columns = [
   },
   {
     name: '_seq_',
+    label: '_seq_',
+    type: 'number',
+    align: 'left',
+    length: 70,
+    decimals: 0,
+    visible: { 'xs': false, 'sm': false, 'md': false, 'lg': false, 'xl': false, '2xl': false, '3xl': false },
+    autosum: false
+  },
+  {
+    name: '_line_no_',
     label: 'Line No',
     type: 'number',
     align: 'left',
@@ -33,7 +43,7 @@ export const columns = [
     autosum: false
   },
   {
-    name: 'part_desc',
+    name: 'part_description',
     label: 'Part Description',
     type: 'string',
     align: 'left',
@@ -42,26 +52,26 @@ export const columns = [
     visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
     autosum: false
   },
+  // {
+  //   name: 'supplier',
+  //   label: 'Supplier',
+  //   type: 'object',
+  //   align: 'left',
+  //   length: 320,
+  //   decimals: 0,
+  //   visible: { 'xs': false, 'sm': false, 'md': false, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+  //   select: ['code', 'description'],
+  //   concatChar: " - ",
+  //   autosum: false
+  // },
   {
-    name: 'po_no',
-    label: 'PO No',
-    type: 'string',
+    name: 'delivery_date',
+    label: 'Delivery Date',
+    type: 'date',
     align: 'left',
-    length: 70,
+    length: 270,
     decimals: 0,
-    visible: { 'xs': false, 'sm': false, 'md': false, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-    autosum: false
-  },
-  {
-    name: 'supplier',
-    label: 'Supplier',
-    type: 'object',
-    align: 'left',
-    length: 320,
-    decimals: 0,
-    visible: { 'xs': false, 'sm': false, 'md': false, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-    select: ['code', 'description'],
-    concatChar: " - ",
+    visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
     autosum: false
   },
   {
@@ -74,26 +84,26 @@ export const columns = [
     visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
     autosum: false
   },
-  {
-    name: 'tax',
-    label: 'Tax',
-    type: 'currency',
-    align: 'right',
-    length: 70,
-    decimals: 0,
-    visible: { 'xs': false, 'sm': false, 'md': false, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-    autosum: true
-  },
-  {
-    name: 'amount',
-    label: 'Amount',
-    type: 'currency',
-    align: 'right',
-    length: 70,
-    decimals: 0,
-    visible: { 'xs': false, 'sm': false, 'md': false, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-    autosum: true
-  },
+  // {
+  //   name: 'tax',
+  //   label: 'Tax',
+  //   type: 'currency',
+  //   align: 'right',
+  //   length: 70,
+  //   decimals: 0,
+  //   visible: { 'xs': false, 'sm': false, 'md': false, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+  //   autosum: true
+  // },
+  // {
+  //   name: 'amount',
+  //   label: 'Amount',
+  //   type: 'currency',
+  //   align: 'right',
+  //   length: 70,
+  //   decimals: 0,
+  //   visible: { 'xs': false, 'sm': false, 'md': false, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+  //   autosum: true
+  // },
 ]
 
 export const commandBarButtons = [
@@ -136,9 +146,17 @@ export const sideBarButtons = [
 
 export const lineMenus = [
   {
+    label: "Insert Above",
+    action: "menuInsertAbove",
+    params: ["id"]
+  }, {
+    label: "Insert Below",
+    action: "menuInsertBelow",
+    params: ["id"]
+  }, {
     label: "Open Detail View",
     action: "menuOpenLineDetail",
-    params: ["id", "_seq_", "tax"]
+    params: ["id", "_seq_"]
   },
   {
     label: "Show Invoice",

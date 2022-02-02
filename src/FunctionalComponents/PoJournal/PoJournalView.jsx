@@ -1,7 +1,13 @@
+import { useEffect } from "react";
 import { SectionCommandBar } from "../../_core/components";
 import { IconEdit, IconPlus, IconTrash } from "../../_core/utilities/svg-icons";
 
 const PoJournal = (props) => {
+
+  useEffect(() => {
+    props.active && !props.disabled && props.refreshData()
+  }, [props.active, props.disabled])
+
   const prepareEdit = () => {
     
   }
