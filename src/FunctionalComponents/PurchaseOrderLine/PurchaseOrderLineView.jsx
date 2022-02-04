@@ -4,7 +4,7 @@ import { StandardTable } from "react-erp-table";
 import { columns, commandBarButtons, sideBarButtons, lineMenus, tableConfig, tableStyle } from "./PurchaseOrderLineConfig"
 import PurchaseOrderLineForm from "./PurchaseOrderLineForm";
 import GlobalStateContext from "../../_core/providers/GlobalStateContext";
-import {DialogBoxConstants} from "../../_core/components/DialogBox"
+import { DialogBoxConstants } from "../../_core/components/DialogBox"
 import purchase_order_line_api from "./purchase_order_line_api";
 import { decodeError } from "../../_core/utilities/exception-handler";
 
@@ -52,7 +52,6 @@ const PurchaseOrderLineView = (props) => {
     if (props.disabled) {
       return false;
     } else {
-      // selectedLines = [id1, id2, ...]
       if (selectedLines.length > 0) {
         switch (action) {
           case "cmdRelease":
@@ -131,13 +130,22 @@ const PurchaseOrderLineView = (props) => {
     DialogBox.showModal(<PurchaseOrderLineForm />, window_size, params, cmdNewRecord_callback);
   }
 
+  const cmdNewRecord_callback = async (result, data) => {
+    return null;
+  }
+
   const prepareEdit = async (data) => {
     let params = {
       data: data,
-      mode: "edit"
+      mode: "edit",
+      refreshData: async () => props.refreshData(props.name)
     };
     let window_size = "sm:w-5/6 md:w-4/6 lg:w-2/4 xl:w-2/5 2xl:w-2/6";
     DialogBox.showModal(<PurchaseOrderLineForm />, window_size, params, cmdEditRecord_callback);
+  }
+
+  const cmdEditRecord_callback = async (result, data) => {
+    return null;
   }
 
   const lineMenuInsert = async ([id], positioning) => {
@@ -145,27 +153,31 @@ const PurchaseOrderLineView = (props) => {
     await prepareCreate(curr_seq, positioning);
   }
 
-  const cmdNewRecord_callback = async (result, data) => {
-    if (result === DialogBoxConstants.Result.Ok) {
-      props.refreshData(props.name)
-    }
+  const cmdDuplicateRecord_callback = async (result, data) => {
   }
 
-  const cmdEditRecord_callback = async (result, data) => {
-    if (result === DialogBoxConstants.Result.Ok) {
-      props.refreshData(props.name)
-    }
+  const cmdDuplicateSelected_Clicked = (data, positioning) => {
+    let params = {
+      data: data,
+      current_sequence: data._seq_,
+      positioning: positioning,
+      mode: "duplicate",
+      refreshData: async () => props.refreshData(props.name)
+    };
+    let window_size = "sm:w-5/6 md:w-4/6 lg:w-2/4 xl:w-2/5 2xl:w-2/6";
+    DialogBox.showModal(<PurchaseOrderLineForm />, window_size, params, cmdDuplicateRecord_callback);
   }
 
-  const cmdDuplicateSelected_Clicked = () => { }
-
-  const cmdDeleteSelected_Clicked = (data, setData, selectedLines) => {
+  const cmdDeleteSelected_Clicked = async (data, setData, selectedLines, setSelectedLines) => {
     let ret = window.confirm('Are you sure you want to delete the selected lines?');
+    let availableRecs = [...globalState.read(props.name)];
     if (ret) {
       try {
-        selectedLines.forEach(async (id) => {
+        [...selectedLines].forEach(async (id) => {
           await purchase_order_line_api.delete(id);
-          globalState.write(props.name, globalState.read(props.name).filter(item => item.id !== id))
+          availableRecs = availableRecs.filter(item => item.id !== id)
+          globalState.write(props.name, availableRecs)
+          setSelectedLines(prev => prev.filter(item => item !== id))
         })
       } catch (err) {
         setApiErrors(JSON.parse(decodeError(err)))
@@ -173,7 +185,7 @@ const PurchaseOrderLineView = (props) => {
     }
   }
 
-  const sideBarActionHandler = async (data, setData, selectedLines, action) => {
+  const sideBarActionHandler = async (data, setData, selectedLines, setSelectedLines, action) => {
     switch (action) {
       case "cmdNewRecord":
         let max_seq = 0;
@@ -186,10 +198,10 @@ const PurchaseOrderLineView = (props) => {
         await prepareEdit(data.filter(item => item.id === selectedLines[0])[0]);
         break;
       case "cmdDuplicateSelected":
-        cmdDuplicateSelected_Clicked(data, setData, selectedLines);
+        cmdDuplicateSelected_Clicked(data.filter(item => item.id === selectedLines[0])[0], "below");
         break;
       case "cmdDeleteSelected":
-        cmdDeleteSelected_Clicked(data, setData, selectedLines);
+        await cmdDeleteSelected_Clicked(data, setData, selectedLines, setSelectedLines);
         break;
       default:
         break;
@@ -208,15 +220,15 @@ const PurchaseOrderLineView = (props) => {
       lineMenu={lineMenus}                                // lineMenu: line menu configurations      
       lineMenuInquireHandler={lineMenuInquireHandler}     // lineMenuInquireHandler: line menu inquire handler callback      
       lineMenuActionHandler={lineMenuActionHandler}       // lineMenuActionHandler: line menu action handler callback      
-      
+
       commandBarButtons={commandBarButtons}               // commandBarButtons: command bar configuration      
       commandBarInquireHandler={commandBarInquireHandler} // commandBarInquireHandler: command bar inquire callback      
       commandBarActionHandler={commandBarActionHandler}   // commandBarActionHandler: command bar action handler callback      
-      
+
       sideBarButtons={sideBarButtons}                     // sideBarButtons: side bar configuration      
       sideBarInquireHandler={sideBarInquireHandler}       // sideBarInquireHandler: side bar inquire callback      
       sideBarActionHandler={sideBarActionHandler}         // sideBarActionHandler: side bar action handler callback      
-      
+
       containerRef={props.containerRef}                   // containerRef: used in column resizing when table is resized
       doSearch={doSearch}                                 // doSearch:			            search callback      
       doDetailSearch={doDetailSearch}                     // doDetailSearch:			      detail search callback

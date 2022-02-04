@@ -19,6 +19,9 @@ const purchase_order_line_api = {
   update: (id, data) => {
     return api().patch(`/api/purchaseOrderLines/${id}`, data)
   },
+  prepareDuplicate: (id) => {
+    return api().get(`/api/purchaseOrderLines/prepareDuplicate`, { params: { id: id } })
+  },
   prepareCreate: (parent_id, curr_seq, positioning) => {
     return api().get(`/api/purchaseOrderLines/prepareCreate`, { params: { parent_id: parent_id, curr_seq: curr_seq, positioning: positioning}})
   },

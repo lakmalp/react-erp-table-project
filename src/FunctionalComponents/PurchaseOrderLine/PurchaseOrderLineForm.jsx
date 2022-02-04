@@ -19,8 +19,12 @@ const PurchaseOrderLineForm = (props) => {
         setApiPreparing(true)
         if (props.mode === "new") {
           res = await purchase_order_line_api.prepareCreate(parent_id, current_sequence, positioning);
-          setLocalData(res.data.data)
+        } else if (props.mode === "edit") {
+          res = await purchase_order_line_api.prepareEdit(props.data.id);
+        } else if (props.mode === "duplicate") {
+          res = await purchase_order_line_api.prepareDuplicate(props.data.id);
         }
+        setLocalData(res.data.data)
       } catch (err) {
         setApiErrors(JSON.parse(decodeError(err)))
       } finally {
@@ -37,17 +41,16 @@ const PurchaseOrderLineForm = (props) => {
     try {
       let res = "";
       setApiCreating(true);
-      if (props.mode === "new") {
+      if (["new", "duplicate"].includes(props.mode)) {
         res = await purchase_order_line_api.create(localData);
       } else {
         res = await purchase_order_line_api.update(props.data.id, localData);
       }
       await props.refreshData();
-      setApiCreating(false);
+      // setApiCreating(false);
       props.callback(DialogBoxConstants.Result.Ok, localData);
     } catch (err) {
       setApiErrors(JSON.parse(decodeError(err)))
-    } finally {
       setApiCreating(false);
     }
   }
@@ -91,14 +94,6 @@ const PurchaseOrderLineForm = (props) => {
           />
           {(apiErrors.hasOwnProperty("delivery_date")) && <div className="text-xs text-red-600 mt-1">{apiErrors.delivery_date}</div>}
         </div>
-        {/* <div className="col-span-2">
-          <label className="block">Tax</label>
-          <input type="text" className="border rounded h-7 outline-none px-1 w-full" />
-        </div>
-        <div className="col-span-2">
-          <label className="block">Discount</label>
-          <input type="text" className="border rounded h-7 outline-none px-1 w-full" />
-        </div> */}
       </div>
       <div className="bg-ss-100 w-full p-2 text-right text-xs mt-3">
         <button
