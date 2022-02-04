@@ -112,7 +112,7 @@ const PurchaseOrderScreen = (props) => {
               parent="PurchaseOrder"
               name="PurchaseOrderLine"
               containerRef={containerRef}
-              refreshData={() => refreshData("PurchaseOrderLine")}
+              refreshData={async () => refreshData("PurchaseOrderLine")}
               theme={theme}
               disabled={headerLoading}
               isHeaderLoading={headerLoading}

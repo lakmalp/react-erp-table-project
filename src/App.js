@@ -39,9 +39,11 @@ function App() {
                     <BreadCrumbs />
                     <MainCommandBar />
                   </div>
-                  <Routes>
-                    <Route path="purchaseOrders/:id" element={<PurchaseOrderScreen />}></Route>
-                  </Routes>
+                  <div className='overflow-y-auto' style={{maxHeight: 'calc(100vh - 40px)'}}>
+                    <Routes>
+                      <Route path="purchaseOrders/:id" element={<PurchaseOrderScreen />}></Route>
+                    </Routes>
+                  </div>
                 </div>
               </div>
             </ToastProvider>

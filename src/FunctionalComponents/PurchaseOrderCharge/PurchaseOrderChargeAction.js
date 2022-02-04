@@ -150,6 +150,10 @@ export const sideBarActionHandler = (data, setData, line_selections, action) => 
   }
 }
 
-export const doSearch = (searchParams) => {
+export const doSearch = (token) => {
   alert("please write search logic");
+}
+
+export const doDetailSearch = (tokens) => {
+  alert("please write detail search logic");
 }

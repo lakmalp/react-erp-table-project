@@ -1,111 +1,6 @@
 import { useRef, useState } from "react"
 import { IconDuplicate, IconEdit, IconPlus, IconTrash } from "../../_core/utilities/svg-icons"
 
-export const columns = [
-  {
-    name: 'id',
-    label: 'ID',
-    type: 'number',
-    align: 'center',
-    length: 30,
-    decimals: 0,
-    visible: { 'xs': false, 'sm': false, 'md': false, 'lg': false, 'xl': false, '2xl': false, '3xl': false },
-    autosum: false
-  },
-  {
-    name: '_seq_',
-    label: '_seq_',
-    type: 'number',
-    align: 'left',
-    length: 70,
-    decimals: 0,
-    visible: { 'xs': false, 'sm': false, 'md': false, 'lg': false, 'xl': false, '2xl': false, '3xl': false },
-    autosum: false
-  },
-  {
-    name: '_line_no_',
-    label: 'Line No',
-    type: 'number',
-    align: 'left',
-    length: 70,
-    decimals: 0,
-    visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-    autosum: false
-  },
-  {
-    name: 'part_code',
-    label: 'Part Code',
-    type: 'string',
-    align: 'left',
-    length: 90,
-    decimals: 0,
-    visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-    autosum: false
-  },
-  {
-    name: 'part_description',
-    label: 'Part Description',
-    type: 'string',
-    align: 'left',
-    length: 270,
-    decimals: 0,
-    visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-    autosum: false
-  },
-  // {
-  //   name: 'supplier',
-  //   label: 'Supplier',
-  //   type: 'object',
-  //   align: 'left',
-  //   length: 320,
-  //   decimals: 0,
-  //   visible: { 'xs': false, 'sm': false, 'md': false, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-  //   select: ['code', 'description'],
-  //   concatChar: " - ",
-  //   autosum: false
-  // },
-  {
-    name: 'delivery_date',
-    label: 'Delivery Date',
-    type: 'date',
-    align: 'left',
-    length: 270,
-    decimals: 0,
-    visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-    autosum: false
-  },
-  {
-    name: 'status',
-    label: 'Status',
-    type: 'string',
-    align: 'left',
-    length: 80,
-    decimals: 0,
-    visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-    autosum: false
-  },
-  // {
-  //   name: 'tax',
-  //   label: 'Tax',
-  //   type: 'currency',
-  //   align: 'right',
-  //   length: 70,
-  //   decimals: 0,
-  //   visible: { 'xs': false, 'sm': false, 'md': false, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-  //   autosum: true
-  // },
-  // {
-  //   name: 'amount',
-  //   label: 'Amount',
-  //   type: 'currency',
-  //   align: 'right',
-  //   length: 70,
-  //   decimals: 0,
-  //   visible: { 'xs': false, 'sm': false, 'md': false, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-  //   autosum: true
-  // },
-]
-
 export const commandBarButtons = [
   {
     label: "Release",
@@ -171,10 +66,116 @@ export const lineMenus = [
 ]
 
 export const tableConfig = {
-  sumColumns: ["tax", "amount"],
-  showGrandSum: true,
-  showFilterSum: true,
-  addSystemButtonsToSideBar: true
+  general: {
+    sumColumns: ["tax", "amount"],
+    showGrandSum: true,
+    showFilterSum: true,
+    addSystemButtonsToSideBar: true
+  },
+  columns: [
+    {
+      name: 'id',
+      label: 'ID',
+      type: 'number',
+      align: 'center',
+      length: 30,
+      decimals: 0,
+      visible: { 'xs': false, 'sm': false, 'md': false, 'lg': false, 'xl': false, '2xl': false, '3xl': false },
+      autosum: false
+    },
+    {
+      name: '_seq_',
+      label: '_seq_',
+      type: 'number',
+      align: 'left',
+      length: 70,
+      decimals: 0,
+      visible: { 'xs': false, 'sm': false, 'md': false, 'lg': false, 'xl': false, '2xl': false, '3xl': false },
+      autosum: false
+    },
+    {
+      name: '_line_no_',
+      label: 'Line No',
+      type: 'number',
+      align: 'left',
+      length: 70,
+      decimals: 0,
+      visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+      autosum: false
+    },
+    {
+      name: 'part_code',
+      label: 'Part Code',
+      type: 'string',
+      align: 'left',
+      length: 90,
+      decimals: 0,
+      visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+      autosum: false
+    },
+    {
+      name: 'part_description',
+      label: 'Part Description',
+      type: 'string',
+      align: 'left',
+      length: 270,
+      decimals: 0,
+      visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+      autosum: false
+    },
+    // {
+    //   name: 'supplier',
+    //   label: 'Supplier',
+    //   type: 'object',
+    //   align: 'left',
+    //   length: 320,
+    //   decimals: 0,
+    //   visible: { 'xs': false, 'sm': false, 'md': false, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+    //   select: ['code', 'description'],
+    //   concatChar: " - ",
+    //   autosum: false
+    // },
+    {
+      name: 'delivery_date',
+      label: 'Delivery Date',
+      type: 'date',
+      align: 'left',
+      length: 270,
+      decimals: 0,
+      visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+      autosum: false
+    },
+    {
+      name: 'status',
+      label: 'Status',
+      type: 'string',
+      align: 'left',
+      length: 80,
+      decimals: 0,
+      visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+      autosum: false
+    },
+    // {
+    //   name: 'tax',
+    //   label: 'Tax',
+    //   type: 'currency',
+    //   align: 'right',
+    //   length: 70,
+    //   decimals: 0,
+    //   visible: { 'xs': false, 'sm': false, 'md': false, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+    //   autosum: true
+    // },
+    // {
+    //   name: 'amount',
+    //   label: 'Amount',
+    //   type: 'currency',
+    //   align: 'right',
+    //   length: 70,
+    //   decimals: 0,
+    //   visible: { 'xs': false, 'sm': false, 'md': false, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+    //   autosum: true
+    // },
+  ]
 }
 
 export const tableStyle = {

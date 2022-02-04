@@ -1,59 +1,6 @@
 import { useRef, useState } from "react"
 import { IconDuplicate, IconEdit, IconPlus, IconTrash } from "../../_core/utilities/svg-icons"
 
-export const columns = [
-  {
-    name: 'id',
-    label: 'ID',
-    type: 'number',
-    align: 'center',
-    length: 30,
-    decimals: 0,
-    visible: { 'xs': false, 'sm': false, 'md': false, 'lg': false, 'xl': false, '2xl': false, '3xl': false },
-    autosum: false
-  },
-  {
-    name: '_seq_',
-    label: 'Line No',
-    type: 'number',
-    align: 'left',
-    length: 70,
-    decimals: 0,
-    visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-    autosum: false
-  },
-  {
-    name: 'po_line_no',
-    label: 'PO Line No',
-    type: 'string',
-    align: 'left',
-    length: 70,
-    decimals: 0,
-    visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-    autosum: false
-  },
-  {
-    name: 'description',
-    label: 'Description',
-    type: 'string',
-    align: 'left',
-    length: 70,
-    decimals: 0,
-    visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-    autosum: false
-  },
-  {
-    name: 'amount',
-    label: 'Amount',
-    type: 'currency',
-    align: 'right',
-    length: 320,
-    decimals: 0,
-    visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
-    autosum: false
-  },
-]
-
 export const commandBarButtons = [
   {
     label: "Release",
@@ -101,9 +48,63 @@ export const lineMenus = [
 ]
 
 export const tableConfig = {
-  sumColumns: ["tax", "amount"],
-  showGrandSum: true,
-  showFilterSum: true
+  general: {
+    sumColumns: ["tax", "amount"],
+    showGrandSum: true,
+    showFilterSum: true
+  },
+  columns: [
+    {
+      name: 'id',
+      label: 'ID',
+      type: 'number',
+      align: 'center',
+      length: 30,
+      decimals: 0,
+      visible: { 'xs': false, 'sm': false, 'md': false, 'lg': false, 'xl': false, '2xl': false, '3xl': false },
+      autosum: false
+    },
+    {
+      name: '_seq_',
+      label: 'Line No',
+      type: 'number',
+      align: 'left',
+      length: 70,
+      decimals: 0,
+      visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+      autosum: false
+    },
+    {
+      name: 'po_line_no',
+      label: 'PO Line No',
+      type: 'string',
+      align: 'left',
+      length: 70,
+      decimals: 0,
+      visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+      autosum: false
+    },
+    {
+      name: 'description',
+      label: 'Description',
+      type: 'string',
+      align: 'left',
+      length: 70,
+      decimals: 0,
+      visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+      autosum: false
+    },
+    {
+      name: 'amount',
+      label: 'Amount',
+      type: 'currency',
+      align: 'right',
+      length: 320,
+      decimals: 0,
+      visible: { 'xs': true, 'sm': true, 'md': true, 'lg': true, 'xl': true, '2xl': true, '3xl': true },
+      autosum: false
+    },
+  ]
 }
 
 export const tableStyle = {

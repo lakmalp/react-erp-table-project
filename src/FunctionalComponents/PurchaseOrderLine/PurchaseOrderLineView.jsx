@@ -1,14 +1,17 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DialogBoxContext } from "../../_core/providers/DialogBoxContext";
 import { StandardTable } from "react-erp-table";
 import { columns, commandBarButtons, sideBarButtons, lineMenus, tableConfig, tableStyle } from "./PurchaseOrderLineConfig"
 import PurchaseOrderLineForm from "./PurchaseOrderLineForm";
 import GlobalStateContext from "../../_core/providers/GlobalStateContext";
 import {DialogBoxConstants} from "../../_core/components/DialogBox"
+import purchase_order_line_api from "./purchase_order_line_api";
+import { decodeError } from "../../_core/utilities/exception-handler";
 
 const PurchaseOrderLineView = (props) => {
   let DialogBox = useContext(DialogBoxContext);
   let globalState = useContext(GlobalStateContext)
+  const [apiErrors, setApiErrors] = useState({})
 
   useEffect(() => {
     props.active && !props.disabled && props.refreshData()
@@ -45,30 +48,30 @@ const PurchaseOrderLineView = (props) => {
     }
   }
 
-  const commandBarInquireHandler = (data, setData, line_selections, action) => {
+  const commandBarInquireHandler = (data, setData, selectedLines, action) => {
     if (props.disabled) {
       return false;
     } else {
-      // line_selections = [id1, id2, ...]
-      if (line_selections.length > 0) {
+      // selectedLines = [id1, id2, ...]
+      if (selectedLines.length > 0) {
         switch (action) {
           case "cmdRelease":
-            return data.filter(line => line_selections.includes(line.id)).reduce((acc, curr) => {
+            return data.filter(line => selectedLines.includes(line.id)).reduce((acc, curr) => {
               return acc && (curr.status === "Open")
             }, true);
 
           case "cmdCreateInvoice":
-            return data.filter(line => line_selections.includes(line.id)).reduce((acc, curr) => {
+            return data.filter(line => selectedLines.includes(line.id)).reduce((acc, curr) => {
               return acc && (curr.status === "Released")
             }, true);
 
           case "cmdSendToIfs":
-            return data.filter(line => line_selections.includes(line.id)).reduce((acc, curr) => {
+            return data.filter(line => selectedLines.includes(line.id)).reduce((acc, curr) => {
               return acc && (curr.status === "Closed")
             }, true);
 
           case "cmdSendToProm":
-            return data.filter(line => line_selections.includes(line.id)).reduce((acc, curr) => {
+            return data.filter(line => selectedLines.includes(line.id)).reduce((acc, curr) => {
               return acc && (["Released", "Closed"].includes(curr.status))
             }, true);
 
@@ -81,11 +84,11 @@ const PurchaseOrderLineView = (props) => {
     }
   }
 
-  const commandBarActionHandler = (data, setData, line_selections, action) => {
-    alert(line_selections, action)
+  const commandBarActionHandler = (data, setData, selectedLines, action) => {
+    alert(selectedLines, action)
   }
 
-  const sideBarInquireHandler = (data, setData, line_selections, action) => {
+  const sideBarInquireHandler = (data, setData, selectedLines, action) => {
     if (props.disabled) {
       return false;
     } else {
@@ -94,13 +97,13 @@ const PurchaseOrderLineView = (props) => {
           return true;
 
         case "cmdDuplicateSelected":
-          return (line_selections.length === 1 ? true : false);
+          return (selectedLines.length === 1 ? true : false);
 
         case "cmdEditSelected":
-          return (line_selections.length === 1 ? true : false);
+          return (selectedLines.length === 1 ? true : false);
 
         case "cmdDeleteSelected":
-          return (line_selections.length > 0 ? true : false);
+          return (selectedLines.length > 0 ? true : false);
 
         default:
           return false;
@@ -108,8 +111,12 @@ const PurchaseOrderLineView = (props) => {
     }
   }
 
-  const doSearch = (searchParams) => {
+  const doSearch = (token) => {
     alert("please write search logic");
+  }
+
+  const doDetailSearch = (tokens) => {
+    alert("please write detail search logic");
   }
 
   const prepareCreate = async (seq, positioning) => {
@@ -117,7 +124,8 @@ const PurchaseOrderLineView = (props) => {
       parent_id: globalState.read(props.parent).id,
       current_sequence: seq,
       positioning: positioning,
-      mode: "new"
+      mode: "new",
+      refreshData: async () => props.refreshData(props.name)
     };
     let window_size = "sm:w-5/6 md:w-4/6 lg:w-2/4 xl:w-2/5 2xl:w-2/6";
     DialogBox.showModal(<PurchaseOrderLineForm />, window_size, params, cmdNewRecord_callback);
@@ -144,14 +152,28 @@ const PurchaseOrderLineView = (props) => {
   }
 
   const cmdEditRecord_callback = async (result, data) => {
-
+    if (result === DialogBoxConstants.Result.Ok) {
+      props.refreshData(props.name)
+    }
   }
 
   const cmdDuplicateSelected_Clicked = () => { }
 
-  const cmdDeleteSelected_Clicked = () => { }
+  const cmdDeleteSelected_Clicked = (data, setData, selectedLines) => {
+    let ret = window.confirm('Are you sure you want to delete the selected lines?');
+    if (ret) {
+      try {
+        selectedLines.forEach(async (id) => {
+          await purchase_order_line_api.delete(id);
+          globalState.write(props.name, globalState.read(props.name).filter(item => item.id !== id))
+        })
+      } catch (err) {
+        setApiErrors(JSON.parse(decodeError(err)))
+      }
+    }
+  }
 
-  const sideBarActionHandler = async (data, setData, line_selections, action) => {
+  const sideBarActionHandler = async (data, setData, selectedLines, action) => {
     switch (action) {
       case "cmdNewRecord":
         let max_seq = 0;
@@ -161,13 +183,13 @@ const PurchaseOrderLineView = (props) => {
         await prepareCreate(max_seq, "bottom");
         break;
       case "cmdEditSelected":
-        await prepareEdit(data);
+        await prepareEdit(data.filter(item => item.id === selectedLines[0])[0]);
         break;
       case "cmdDuplicateSelected":
-        cmdDuplicateSelected_Clicked(data, setData, line_selections);
+        cmdDuplicateSelected_Clicked(data, setData, selectedLines);
         break;
       case "cmdDeleteSelected":
-        cmdDeleteSelected_Clicked(data, setData, line_selections);
+        cmdDeleteSelected_Clicked(data, setData, selectedLines);
         break;
       default:
         break;
@@ -175,26 +197,30 @@ const PurchaseOrderLineView = (props) => {
   }
   return (
     <StandardTable
-      conf={tableConfig}
-      style={tableStyle}
-      theme={props.theme}
-      data={globalState.read("PurchaseOrderLine")}
-      dataSource={props.name}
-      loadingSource={globalState.loadingSource}
-      refreshData={props.refreshData}
-      columns={columns}
-      lineMenu={lineMenus}
-      lineMenuInquireHandler={lineMenuInquireHandler}
-      lineMenuActionHandler={lineMenuActionHandler}
-      commandBarButtons={commandBarButtons}
-      commandBarInquireHandler={commandBarInquireHandler}
-      commandBarActionHandler={commandBarActionHandler}
-      sideBarButtons={sideBarButtons}
-      sideBarInquireHandler={sideBarInquireHandler}
-      sideBarActionHandler={sideBarActionHandler}
-      containerRef={props.containerRef}
-      search={doSearch}
-      buttonEnablers={[props.disabled]}
+      configuration={tableConfig}                         // configuration: table and column configuration details      
+      style={tableStyle}                                  // style: table styling details      
+      theme={props.theme}                                 // theme: specifies which theme to be applied
+      data={globalState.read("PurchaseOrderLine")}        // data: data      
+      dataSource={props.name}                             // dataSource: data source in which the table has been attached to
+      loadingSource={globalState.loadingSource}           // loadingDataSource: current loading data source
+      refreshData={props.refreshData}                     // refreshData: callback to refresh data
+
+      lineMenu={lineMenus}                                // lineMenu: line menu configurations      
+      lineMenuInquireHandler={lineMenuInquireHandler}     // lineMenuInquireHandler: line menu inquire handler callback      
+      lineMenuActionHandler={lineMenuActionHandler}       // lineMenuActionHandler: line menu action handler callback      
+      
+      commandBarButtons={commandBarButtons}               // commandBarButtons: command bar configuration      
+      commandBarInquireHandler={commandBarInquireHandler} // commandBarInquireHandler: command bar inquire callback      
+      commandBarActionHandler={commandBarActionHandler}   // commandBarActionHandler: command bar action handler callback      
+      
+      sideBarButtons={sideBarButtons}                     // sideBarButtons: side bar configuration      
+      sideBarInquireHandler={sideBarInquireHandler}       // sideBarInquireHandler: side bar inquire callback      
+      sideBarActionHandler={sideBarActionHandler}         // sideBarActionHandler: side bar action handler callback      
+      
+      containerRef={props.containerRef}                   // containerRef: used in column resizing when table is resized
+      doSearch={doSearch}                                 // doSearch:			            search callback      
+      doDetailSearch={doDetailSearch}                     // doDetailSearch:			      detail search callback
+      disabled={props.disabled}                           // disabled: disables all button actions
     />
   )
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { DialogBoxConstants } from "../../_core/components/DialogBox/DialogBoxPlaceholder";
 import purchase_order_line_api from "./purchase_order_line_api";
 import { decodeError } from "../../_core/utilities/exception-handler"
+import { IconLoading } from "../../_core/utilities/svg-icons";
 
 const PurchaseOrderLineForm = (props) => {
   const [localData, setLocalData] = useState({ ...props.data });
@@ -18,12 +19,10 @@ const PurchaseOrderLineForm = (props) => {
         setApiPreparing(true)
         if (props.mode === "new") {
           res = await purchase_order_line_api.prepareCreate(parent_id, current_sequence, positioning);
-        } else {
-          res = await purchase_order_line_api.prepareEdit(localData.id);
+          setLocalData(res.data.data)
         }
-        setLocalData(res.data.data)
       } catch (err) {
-        setApiErrors(decodeError(err).message)
+        setApiErrors(JSON.parse(decodeError(err)))
       } finally {
         setApiPreparing(false)
       }
@@ -36,12 +35,18 @@ const PurchaseOrderLineForm = (props) => {
 
   const save = async () => {
     try {
+      let res = "";
       setApiCreating(true);
-      let res = await purchase_order_line_api.create(localData);
+      if (props.mode === "new") {
+        res = await purchase_order_line_api.create(localData);
+      } else {
+        res = await purchase_order_line_api.update(props.data.id, localData);
+      }
+      await props.refreshData();
       setApiCreating(false);
       props.callback(DialogBoxConstants.Result.Ok, localData);
     } catch (err) {
-      setApiErrors(decodeError(err).message)
+      setApiErrors(JSON.parse(decodeError(err)))
     } finally {
       setApiCreating(false);
     }
@@ -51,7 +56,7 @@ const PurchaseOrderLineForm = (props) => {
     <div className="w-full bg-white font-inter text-sm">
       <div className="grid grid-cols-6 gap-2 p-2">
         <div className="col-span-2">
-          <label className="block">Part Code</label>
+          <label className="block text-xs">Part Code</label>
           <input
             id="part_code"
             type="text"
@@ -63,7 +68,7 @@ const PurchaseOrderLineForm = (props) => {
           {(apiErrors.hasOwnProperty("part_code")) && <div className="text-xs text-red-600 mt-1">{apiErrors.part_code}</div>}
         </div>
         <div className="col-span-4">
-          <label className="block">Part Description</label>
+          <label className="block text-xs">Part Description</label>
           <input
             id="part_description"
             type="text"
@@ -74,8 +79,8 @@ const PurchaseOrderLineForm = (props) => {
           />
           {(apiErrors.hasOwnProperty("part_description")) && <div className="text-xs text-red-600 mt-1">{apiErrors.part_description}</div>}
         </div>
-        <div className="col-span-2">
-          <label className="block">Delivery Date</label>
+        <div className="col-span-2 mt-3">
+          <label className="block text-xs">Delivery Date</label>
           <input
             id="delivery_date"
             type="date"
@@ -97,10 +102,13 @@ const PurchaseOrderLineForm = (props) => {
       </div>
       <div className="bg-ss-100 w-full p-2 text-right text-xs mt-3">
         <button
-          className={"px-4 rounded font-nunito h-7 font-semibold " + (isBtnSaveDisabled ? "bg-gray-100 text-gray-800" : "bg-blue-500 text-white")}
+          className={"w-28 rounded font-nunito h-7 font-semibold " + (isBtnSaveDisabled ? "bg-gray-100 text-gray-800" : "bg-blue-500 text-white")}
           onClick={() => save()}
         >
-          {apiPreparing ? <span>Please wait...</span> : (apiCreating ? <span>Saving...</span> : <span>Save</span>)}
+          <div className="flex items-center justify-center">
+            {(apiPreparing || apiCreating) && <IconLoading width="15" color="black" className="mr-2 animate-spin" />}
+            {apiPreparing ? <span>Please wait...</span> : (apiCreating ? <span>Saving...</span> : <span>Save</span>)}
+          </div>
         </button>
       </div>
     </div>

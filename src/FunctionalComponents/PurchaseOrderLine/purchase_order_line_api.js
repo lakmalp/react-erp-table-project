@@ -25,6 +25,9 @@ const purchase_order_line_api = {
   create: (data) => {
     return api().post(`/api/purchaseOrderLines`, data)
   },
+  delete: (id) => {
+    return api().delete(`/api/purchaseOrderLines/${id}`)
+  },
 }
 
 export default purchase_order_line_api;
