@@ -6,10 +6,16 @@ import { commandBarButtons, sideBarButtons, lineMenus, tableConfig, tableStyle }
 
 const PurchaseOrderCharge = (props) => {
   let globalState = useContext(GlobalStateContext)
+  let {
+    parent_id: props_parent_id,
+    active: props_active,
+    disabled: props_disabled,
+    refreshData: props_refreshData
+  } = props;
 
   useEffect(() => {
-    props.active && !props.disabled && props.refreshData()
-  }, [props.active, props.disabled])
+    props_active && !props_disabled && props_refreshData();
+  }, [props_parent_id, props_active, props_disabled, props_refreshData])
 
   return (
     <StandardTable

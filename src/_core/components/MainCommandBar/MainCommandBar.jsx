@@ -1,11 +1,7 @@
-import React, {useEffect} from "react"
-import eventBus from "../../utilities/event-bus"
-import { IconLoading, IconPlus, IconSave, IconTrash } from '../../utilities/svg-icons';
+import React from "react"
+import { IconLoading } from '../../utilities/svg-icons';
 
 const MainCommandBar = () => {
-  const save = () => {
-    eventBus.dispatch("commandBarSave_clicked", "")
-  }
   return (
     <div>
       {/* <button className='mr-2 py-2 text-xs font-roboto font-semibolda bg-ss-300 hover:bg-ss-500 text-black'>

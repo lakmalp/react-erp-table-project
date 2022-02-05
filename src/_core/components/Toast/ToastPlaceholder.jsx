@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect } from "react"
 import { ToastContext } from "../../providers/ToastContext"
-import { IconTimes, IconWindowMaximize, IconWindowRestore } from "../../utilities/svg-icons"
+import { IconTimes } from "../../utilities/svg-icons"
 
 export const ToastPlaceholder = (props) => {
   let Toast = useContext(ToastContext);

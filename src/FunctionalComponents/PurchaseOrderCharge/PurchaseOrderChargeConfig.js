@@ -1,4 +1,3 @@
-import { useRef, useState } from "react"
 import { IconDuplicate, IconEdit, IconPlus, IconTrash } from "../../_core/utilities/svg-icons"
 
 export const commandBarButtons = [

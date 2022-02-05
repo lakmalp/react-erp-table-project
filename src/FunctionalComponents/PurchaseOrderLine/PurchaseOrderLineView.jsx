@@ -12,10 +12,17 @@ const PurchaseOrderLineView = (props) => {
   let DialogBox = useContext(DialogBoxContext);
   let globalState = useContext(GlobalStateContext)
   const [apiErrors, setApiErrors] = useState({})
+  let {
+    parentId: props_parentId,
+    active: props_active,
+    disabled: props_disabled,
+    refreshData: props_refreshData,
+    headerPopulated: props_headerPopulated
+  } = props;
 
   useEffect(() => {
-    props.active && !props.disabled && props.refreshData()
-  }, [props.active, props.disabled])
+    props_active && !props_disabled && props_headerPopulated && props_refreshData();
+  }, [props_parentId, props_active, props_disabled, props_headerPopulated])
 
   const lineMenuActionHandler = (action, params) => {
     switch (action) {

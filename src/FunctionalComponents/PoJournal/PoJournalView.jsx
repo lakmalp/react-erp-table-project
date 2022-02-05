@@ -3,18 +3,25 @@ import { SectionCommandBar } from "../../_core/components";
 import { IconEdit, IconPlus, IconTrash } from "../../_core/utilities/svg-icons";
 
 const PoJournal = (props) => {
+  let {
+    parent_id: props_parent_id,
+    active: props_active,
+    disabled: props_disabled,
+    refreshData: props_refreshData,
+    headerPopulated: props_headerPopulated
+  } = props;
 
   useEffect(() => {
-    props.active && !props.disabled && props.refreshData()
-  }, [props.active, props.disabled])
+    props_active && !props_disabled && props_headerPopulated && props_refreshData();
+  }, [props_parent_id, props_active, props_disabled, props_headerPopulated])
 
   const prepareEdit = () => {
     
   }
 
-  const cmdEdit_callback = async (result, data) => {
+  // const cmdEdit_callback = async (result, data) => {
     
-  }
+  // }
 
   const prepareCreate = () => {
   }

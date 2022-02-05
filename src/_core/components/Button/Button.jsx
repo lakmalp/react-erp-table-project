@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 const Button = ({ type, text, disabled, callback, icon }) => {
   const className = () => {
@@ -10,18 +10,6 @@ const Button = ({ type, text, disabled, callback, icon }) => {
     }
   }
   return (
-    // <button
-    //   className={`mr-2 py-2 text-xs font-roboto rounded ` + (disabled ? "bg-ss-200 text-gray-400 pointer-events-none" : "bg-ss-400 hover:bg-ss-600 text-black")}
-    //   onClick={() => callback()}
-    //   disabled={disabled}
-    // >
-    //   <div className='flex items-center mx-2'>
-    //     {
-    //       icon && <LazyIcon icon={icon.component} width={icon.width} className="mr-2" color={disabled ? "rgba(140, 149, 165)" : "#000"} />
-    //     }
-    //     {text}
-    //   </div>
-    // </button>
     <button
       className={className()}
       onClick={() => callback()}

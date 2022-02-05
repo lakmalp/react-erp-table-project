@@ -12,9 +12,7 @@ export const GlobalStateProvider = ({ children }) => {
         read: (section) => state[section],
         write: (section, val) => setState(prev => ({ ...prev, [section]: val })),
         loadingSource: loadingSource,
-        setLoadingSource: setLoadingSource
-        // readDataHierarchy: () => state.dataHierarchy,
-        // writeDataHierarchy: (val) => setState(prev => ({ ...prev, dataHierarchy: val }))
+        setLoadingSource: (p) => setLoadingSource(p)
       }}
     >
       {children}

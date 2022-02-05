@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import { DialogBoxContext } from "../../providers/DialogBoxContext"
 import { IconTimes, IconWindowMaximize, IconWindowRestore } from "../../utilities/svg-icons"
 

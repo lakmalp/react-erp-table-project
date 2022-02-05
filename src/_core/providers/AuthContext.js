@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
-import { auth_api_is_logged, auth_api_get_user, auth_api_logout, auth_api_set_csrf_cookie, auth_api_login } from '../api/auth_api';
+import { auth_api_get_user, auth_api_logout, auth_api_set_csrf_cookie, auth_api_login } from '../api/auth_api';
 import history from "../utilities/history"
 
 export const AuthContext = React.createContext();
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
         login: async (email, password) => {
           setStatus("pending");
           auth_api_login(email, password)
-            .then(res => {
+            .then(() => {
               auth_api_get_user()
                 .then(user => {
                   setStatus("success");
@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
         },
         logout: (redirect) => {
           auth_api_logout()
-            .then(res => {
+            .then(() => {
               setIsAuthed(false)
               setUser()
               const loc = {
