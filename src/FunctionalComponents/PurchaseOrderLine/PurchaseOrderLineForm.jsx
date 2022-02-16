@@ -46,8 +46,8 @@ const PurchaseOrderLineForm = (props) => {
       } else {
         res = await purchase_order_line_api.update(props.data.id, localData);
       }
+      props.clearSelectedLines()
       await props.refreshData();
-      // setApiCreating(false);
       props.callback(DialogBoxConstants.Result.Ok, localData);
     } catch (err) {
       setApiErrors(JSON.parse(decodeError(err)))

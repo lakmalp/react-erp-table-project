@@ -21,8 +21,7 @@ const SectionCommandBar = (props) => {
           />
         )
       }
-      <IconLoading width="20" color="rgb(50,50,50)" className={"ml-2 animate-spin " + (loadingSource === section ? "" : "hidden")} />
-      <span>{`${section}`}</span>
+      {/* <IconLoading width="20" color="rgb(50,50,50)" className={"ml-2 animate-spin " + (loadingSource === section ? "" : "hidden")} /> */}
     </div>
   )
 }

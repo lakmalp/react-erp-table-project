@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { SectionCommandBar } from "../../_core/components";
 import { IconEdit, IconPlus, IconTrash } from "../../_core/utilities/svg-icons";
+import EventBus from "../../_core/utilities/event-bus"
 
 const PoJournal = (props) => {
   let {
@@ -12,8 +13,19 @@ const PoJournal = (props) => {
   } = props;
 
   useEffect(() => {
-    props_active && !props_disabled && props_headerPopulated && props_refreshData();
-  }, [props_parent_id, props_active, props_disabled, props_headerPopulated])
+    EventBus.on("headerLoadingDone", (id) => {
+      props_active && props_refreshData(id);
+    }
+    );
+
+    return () => {
+      EventBus.remove("headerLoadingDone");
+    }
+  }, [])
+
+  // useEffect(() => {
+  //   props_active && !props_disabled && props_headerPopulated && props_refreshData();
+  // }, [props_parent_id, props_active, props_disabled, props_headerPopulated])
 
   const prepareEdit = () => {
     

@@ -7,22 +7,27 @@ import GlobalStateContext from "../../_core/providers/GlobalStateContext";
 import { DialogBoxConstants } from "../../_core/components/DialogBox"
 import purchase_order_line_api from "./purchase_order_line_api";
 import { decodeError } from "../../_core/utilities/exception-handler";
+import EventBus from "../../_core/utilities/event-bus"
 
 const PurchaseOrderLineView = (props) => {
   let DialogBox = useContext(DialogBoxContext);
   let globalState = useContext(GlobalStateContext)
   const [apiErrors, setApiErrors] = useState({})
-  let {
-    parentId: props_parentId,
-    active: props_active,
-    disabled: props_disabled,
-    refreshData: props_refreshData,
-    headerPopulated: props_headerPopulated
-  } = props;
 
   useEffect(() => {
-    props_active && !props_disabled && props_headerPopulated && props_refreshData();
-  }, [props_parentId, props_active, props_disabled, props_headerPopulated])
+    EventBus.on("headerLoading", () => {
+      globalState.write(props.name, []);
+    });
+
+    EventBus.on("headerLoadingDone", (id) => {
+      props.active && props.refreshData(id);
+    });
+
+    return () => {
+      EventBus.remove("headerLoadingDone");
+      EventBus.remove("headerLoading");
+    }
+  }, [])
 
   const lineMenuActionHandler = (action, params) => {
     switch (action) {
@@ -63,7 +68,7 @@ const PurchaseOrderLineView = (props) => {
         switch (action) {
           case "cmdRelease":
             return data.filter(line => selectedLines.includes(line.id)).reduce((acc, curr) => {
-              return acc && (curr.status === "Open")
+              return acc && (curr.status === "Planned")
             }, true);
 
           case "cmdCreateInvoice":
@@ -131,7 +136,7 @@ const PurchaseOrderLineView = (props) => {
       current_sequence: seq,
       positioning: positioning,
       mode: "new",
-      refreshData: async () => props.refreshData(props.name)
+      refreshData: async () => props.refreshData(globalState.read(props.parent).id)
     };
     let window_size = "sm:w-5/6 md:w-4/6 lg:w-2/4 xl:w-2/5 2xl:w-2/6";
     DialogBox.showModal(<PurchaseOrderLineForm />, window_size, params, cmdNewRecord_callback);
@@ -141,11 +146,12 @@ const PurchaseOrderLineView = (props) => {
     return null;
   }
 
-  const prepareEdit = async (data) => {
+  const prepareEdit = async (data, setSelectedLines) => {
     let params = {
       data: data,
       mode: "edit",
-      refreshData: async () => props.refreshData(props.name)
+      refreshData: async () => props.refreshData(globalState.read(props.parent).id),
+      clearSelectedLines: () => setSelectedLines([])
     };
     let window_size = "sm:w-5/6 md:w-4/6 lg:w-2/4 xl:w-2/5 2xl:w-2/6";
     DialogBox.showModal(<PurchaseOrderLineForm />, window_size, params, cmdEditRecord_callback);
@@ -163,13 +169,14 @@ const PurchaseOrderLineView = (props) => {
   const cmdDuplicateRecord_callback = async (result, data) => {
   }
 
-  const cmdDuplicateSelected_Clicked = (data, positioning) => {
+  const cmdDuplicateSelected_Clicked = (data, positioning, setSelectedLines) => {
     let params = {
       data: data,
       current_sequence: data._seq_,
       positioning: positioning,
       mode: "duplicate",
-      refreshData: async () => props.refreshData(props.name)
+      refreshData: async () => props.refreshData(globalState.read(props.parent).id),
+      clearSelectedLines: () => setSelectedLines([])
     };
     let window_size = "sm:w-5/6 md:w-4/6 lg:w-2/4 xl:w-2/5 2xl:w-2/6";
     DialogBox.showModal(<PurchaseOrderLineForm />, window_size, params, cmdDuplicateRecord_callback);
@@ -202,10 +209,10 @@ const PurchaseOrderLineView = (props) => {
         await prepareCreate(max_seq, "bottom");
         break;
       case "cmdEditSelected":
-        await prepareEdit(data.filter(item => item.id === selectedLines[0])[0]);
+        await prepareEdit(data.filter(item => item.id === selectedLines[0])[0], setSelectedLines);
         break;
       case "cmdDuplicateSelected":
-        cmdDuplicateSelected_Clicked(data.filter(item => item.id === selectedLines[0])[0], "below");
+        cmdDuplicateSelected_Clicked(data.filter(item => item.id === selectedLines[0])[0], "below", setSelectedLines);
         break;
       case "cmdDeleteSelected":
         await cmdDeleteSelected_Clicked(data, setData, selectedLines, setSelectedLines);
@@ -214,12 +221,13 @@ const PurchaseOrderLineView = (props) => {
         break;
     }
   }
+
   return (
     <StandardTable
       configuration={tableConfig}                         // configuration: table and column configuration details      
       style={tableStyle}                                  // style: table styling details      
       theme={props.theme}                                 // theme: specifies which theme to be applied
-      data={globalState.read("PurchaseOrderLine")}        // data: data      
+      data={globalState.read(props.name)}        // data: data      
       dataSource={props.name}                             // dataSource: data source in which the table has been attached to
       loadingSource={globalState.loadingSource}           // loadingDataSource: current loading data source
       refreshData={props.refreshData}                     // refreshData: callback to refresh data

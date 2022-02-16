@@ -1,5 +1,6 @@
 import './App.css';
 import PurchaseOrderScreen from "./Screens/PurchaseOrderScreen";
+import {Loader} from "./_core/components/index";
 
 import {
   BrowserRouter,
@@ -31,7 +32,8 @@ function App() {
                     <BreadCrumbs />
                     <MainCommandBar />
                   </div>
-                  <div className='overflow-y-auto' style={{maxHeight: 'calc(100vh - 40px)'}}>
+                  <div className='overflow-y-auto' style={{ maxHeight: 'calc(100vh - 40px)' }}>
+                    <Loader />
                     <Routes>
                       <Route path="purchaseOrders/:id" element={<PurchaseOrderScreen />}></Route>
                     </Routes>

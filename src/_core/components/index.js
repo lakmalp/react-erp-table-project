@@ -5,6 +5,7 @@ import BreadCrumbs from "./BreadCrumbs/BreadCrumbs"
 import ToastContainer from "./Toast/ToastContainer"
 import SectionCommandBar from "./SectionCommandBar/SectionCommandBar"
 import Button from "./Button/Button"
+import Loader from "./Loader/Loader"
 
 export {
   TabContainer,
@@ -14,5 +15,6 @@ export {
   BreadCrumbs, 
   ToastContainer, 
   SectionCommandBar,
-  Button
+  Button,
+  Loader
 };

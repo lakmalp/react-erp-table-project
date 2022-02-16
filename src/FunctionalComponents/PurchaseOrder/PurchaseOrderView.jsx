@@ -6,7 +6,6 @@ import { DialogBoxContext } from "../../_core/providers/DialogBoxContext";
 import { DialogBoxConstants } from "../../_core/components/DialogBox/DialogBoxPlaceholder";
 import { ToastContext } from "../../_core/providers/ToastContext";
 import { SectionCommandBar } from "../../_core/components"
-// import purchase_order_api from "./api/purchase_order_api";
 import { formatDate } from "../../_core/utilities/date-formatting";
 
 const PurchaseOrderView = (props) => {
@@ -20,7 +19,7 @@ const PurchaseOrderView = (props) => {
   } = props;
 
   useEffect(() => {
-    props_refreshData();
+    props_refreshData("");
   }, [props_parentId])
 
   const cmdEdit_callback = async (result, data) => {
